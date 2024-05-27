@@ -42,21 +42,22 @@ def oscar_data():
 
     return full_info,best_pictures
 
+
+
 # HOCKEY DATA
 def hockey_data():
-    # Step 1: Define the URL
     hockey_url = 'https://www.scrapethissite.com/pages/forms/?page_num=1'
 
-    # Step 2: Send a request to the URL
+    # Send a request to the URL
     response = requests.get(hockey_url)
 
-    # Step 3: Parse the HTML content
+    # Parse the HTML content
     soup = bsp(response.text, 'html.parser')
 
-    # Step 4: Find the 'ul' with the class 'pagination'
+    # Find the 'ul' with the class 'pagination'
     pagination_ul = soup.find('ul', {'class': 'pagination'})
 
-    # Step 5: Extract all 'a' tags within the 'ul' and get their 'href' attributes
+    # Extract all 'a' tags within the 'ul' and get their 'href' attributes
     hrefs = []
     if pagination_ul:
         a_tags = pagination_ul.find_all('a')
@@ -65,13 +66,8 @@ def hockey_data():
             if href:
                 hrefs.append(href)
 
-    # Print the extracted hrefs
-    #print(hrefs)
     #last href is same as page 2, so remove it
     hrefs = hrefs[:-1]
-
-    # for h in hrefs:
-    #   print('https://www.scrapethissite.com'+h)
 
     teams=[] # array of dict --> each dict in this array denotes a team
     for url in hrefs:
@@ -114,7 +110,9 @@ def hockey_data():
 
             teams.append(dic)
 
-        return teams
+    return teams
+
+
 
 def get_adv_urls():
     adv_url='https://www.scrapethissite.com/pages/advanced/'
@@ -128,28 +126,22 @@ def get_adv_urls():
         print(adv_base_url+i.a['href'])
     return adv_urls
 
+
+
 def failed_req_spoofing_headers():
-    #SPOOFING THE HEADERS --> ADVANCED TOPICS REAL WORLD CHALLENGE - 1
-    import requests
-    from bs4 import BeautifulSoup as bsp
-
-    # URL to scrape
     url = 'https://www.scrapethissite.com/pages/advanced/?gotcha=headers'
-
-    # Make the GET request
     response = requests.get(url)
-
-    # Check if the request was successful
+    res = ""
     if response.status_code == 200:
-        # Parse the HTML content
         soup = bsp(response.content, 'html.parser')
-        print(soup.prettify())  # Print the formatted HTML
+        res = soup.prettify()
     else:
-        print(f"Failed to retrieve content. Status code: {response.status_code}")
+        res = f"Failed to retrieve content. Status code: {response.status_code}"
+    return res
+
+
 
 def spoof_headers():
-
-    # Define the headers
     headers = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
         'Accept-Encoding': 'gzip, deflate, br, zstd',
@@ -167,25 +159,26 @@ def spoof_headers():
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
     }
 
-    # Perform the request
     url = 'https://www.scrapethissite.com/pages/advanced/?gotcha=headers'
     response = requests.get(url, headers=headers)
 
-    # Check the encoding
     encoding = response.headers.get('Content-Encoding')
-    print("Content-Encoding:", encoding)
+    content = None
 
-    # Handle different encodings
-    if encoding == 'gzip':
-        with gzip.GzipFile(fileobj=BytesIO(response.content)) as f:
-            content = f.read().decode('utf-8')
-    elif encoding == 'deflate':
-        content = zlib.decompress(response.content, -zlib.MAX_WBITS).decode('utf-8')
-    elif encoding == 'br':
-        content = brotli.decompress(response.content).decode('utf-8')
-    else:
+    try:
+        if encoding == 'gzip':
+            content = gzip.decompress(response.content).decode('utf-8')
+        elif encoding == 'deflate':
+            content = zlib.decompress(response.content, -zlib.MAX_WBITS).decode('utf-8')
+        elif encoding == 'br':
+            content = brotli.decompress(response.content).decode('utf-8')
+        else:
+            content = response.text
+    except brotli.error as e:
+        print(f"Brotli decompression failed: {e}")
+        content = response.text
+    except Exception as e:
+        print(f"An error occurred: {e}")
         content = response.text
 
-    # Print the response text
-    print(content)
     return content

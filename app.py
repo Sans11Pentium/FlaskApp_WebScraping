@@ -7,20 +7,17 @@
 # deactivate
 
 # import needed python modules
-import requests
-from bs4 import BeautifulSoup as bsp
 from flask import Flask, render_template
 from flask import Flask
-from flask_pymongo import PyMongo
-import json
+# from flask_pymongo import PyMongo
 
 #import functions for scraping
 from scrape_data import oscar_data, hockey_data, failed_req_spoofing_headers, spoof_headers
 
 #start mongodb compass and operate on database called "myDatabase"
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
-db = PyMongo(app).db
+# app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
+# db = PyMongo(app).db
 
 #home route
 @app.route('/')

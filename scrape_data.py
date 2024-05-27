@@ -3,7 +3,6 @@ import requests
 from bs4 import BeautifulSoup as bsp
 import gzip
 import zlib
-from io import BytesIO
 import brotli
 
 #OSCAR DATA

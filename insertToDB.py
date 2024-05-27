@@ -1,5 +1,3 @@
-#import functions for scraping
-from scrape_data import oscar_data, hockey_data
 from pymongo import MongoClient
 from scrape_data import oscar_data, hockey_data  # Make sure these are correctly imported
 

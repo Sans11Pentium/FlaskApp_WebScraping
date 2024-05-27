@@ -21,7 +21,7 @@ Web scraping is the process of extracting data from websites. In this project, t
 ### Clone the repository:
 
 ```bash
-git clone https://github.com/your_username/web-scraping-project.git
+git clone https://github.com/Sans11Pentium/FlaskApp_WebScraping.git
 ```
 
 ### Install dependencies:

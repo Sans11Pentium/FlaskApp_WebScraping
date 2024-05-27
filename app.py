@@ -15,7 +15,7 @@ from flask_pymongo import PyMongo
 import json
 
 #import functions for scraping
-from scrape_data import oscar_data, hockey_data, get_adv_urls, failed_req_spoofing_headers, spoof_headers
+from scrape_data import oscar_data, hockey_data, failed_req_spoofing_headers, spoof_headers
 
 #start mongodb compass and operate on database called "myDatabase"
 app = Flask(__name__)

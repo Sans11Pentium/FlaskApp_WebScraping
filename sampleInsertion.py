@@ -36,6 +36,32 @@ data_list = [
 
 # Insert the documents
 result = collection.insert_many(data_list)
+query = {'name': 'Charlie'}
+result = collection.delete_one(query)
 
-# Print the inserted documents' IDs
-print(f"Inserted IDs: {result.inserted_ids}")
+# Print the number of documents deleted
+print(f"Deleted {result.deleted_count} document.")
+
+#Deleting Multiple Document
+# Criteria to find documents to delete
+query = {'city': 'New Chicago'}
+
+# Delete the documents
+result = collection.delete_many(query)
+
+# Print the number of documents deleted
+print(f"Deleted {result.deleted_count} documents.")
+
+# Criteria to find documents to update
+query = {'city': 'Chicago'}
+
+# New values to update
+new_values = {'$set': {'city': 'New Chicago'}}
+
+# Update the documents
+result = collection.update_many(query, new_values)
+
+new_values = {'$set': {'age': 26}}
+
+# Update the document
+result = collection.update_one(query, new_values)
